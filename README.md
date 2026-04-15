@@ -1,59 +1,47 @@
-<h1 align="center">
-  <br>
-  <a href="https://www.palermo.edu"><img src="https://www.palermo.edu/images/header/logo@2x.png" alt="up logo" width="130"></a>
-  <br>
-  Arquitectura Web 
-</h1>
-<br>
-    
-***
+# Sistema de Gestión de Venta de Entradas - Backend API
 
-[![forthebadge](https://forthebadge.com/images/badges/docker-container.svg)](https://forthebadge.com)
-[![forthebadge](https://forthebadge.com/images/badges/made-with-javascript.svg)](https://forthebadge.com)
-[![forthebadge](http://forthebadge.com/images/badges/built-with-love.svg)](http://forthebadge.com)
+## Descripción del Backend Elegido
 
+**Dominio:** Sistema de Gestión de Venta de Entradas para Espectáculos.
 
-<br>
+El backend a desarrollar proporcionará los servicios necesarios para administrar la cartelera de eventos y la venta de tickets de una plataforma online. La lógica de negocio principal se encargará de gestionar el catálogo de Espectáculos (junto con sus respectivos Estadios y Ubicaciones disponibles) y de procesar las transacciones de las Ventas. Además, el sistema incluirá un módulo de estadísticas capaz de procesar los datos transaccionales para emitir reportes de recaudación y rendimiento por evento, centralizando toda la persistencia y la lógica comercial mediante una API RESTful desarrollada en Node.js y Express.
 
-Repositorio oficial de la materia Arquitectura Web. Departamento de Ingeniería - UP  
-**Profesor Ing Diego Marafetti**
+---
 
-# Contenidos
+## Documentación de la API (Endpoints)
 
-- [Requerimientos](#Requerimientos)
-- [Entorno de desarrollo](#installation)
-- [Trabajo Práctico](./trabajo-practico-spec/README.md)
-- [Contributing](#contributing)
-- [Contacto](#contacto)
+A continuación se detalla el diseño de la API RESTful (Nivel 2) expuesta por el backend.
 
+### 1. Módulo: Espectáculos (CRUD)
 
-## Requerimientos 🚀
+* **`GET /api/espectaculos`**
+  * **Descripción:** Recupera la lista completa de todos los espectáculos registrados en el sistema, incluyendo información básica como nombre, fecha y estadio asignado.
+  * **Códigos de estado:** `200 OK`.
 
-- Descargar e instalar [Node.js](https://nodejs.org/en/download/package-manager/current)
+* **`GET /api/espectaculos/:id`**
+  * **Descripción:** Recupera los detalles completos de un espectáculo específico a través de su parámetro de ruta (ID), incluyendo las ubicaciones y precios disponibles.
+  * **Códigos de estado:** `200 OK` (Encontrado), `404 Not Found` (No existe).
 
+* **`POST /api/espectaculos`**
+  * **Descripción:** Crea un nuevo espectáculo en el sistema a partir de la información enviada en el cuerpo (body) de la petición.
+  * **Códigos de estado:** `201 Created` (Éxito), `400 Bad Request` (Faltan datos).
 
-## Entornos de Desarrollo
+* **`PUT /api/espectaculos/:id`**
+  * **Descripción:** Actualiza la información de un espectáculo existente (por ejemplo, cambio de fecha o modificación de precios).
+  * **Códigos de estado:** `200 OK` (Actualizado), `400 Bad Request` (Datos inválidos), `404 Not Found` (No existe).
 
-Cualquier IDE. Preferentemente que soporte Javascript, HTML y CSS. No hay preferencias en cuanto al sistema operativo. 
+* **`DELETE /api/espectaculos/:id`**
+  * **Descripción:** Elimina (o da de baja lógica) un espectáculo del sistema.
+  * **Códigos de estado:** `200 OK` o `204 No Content` (Eliminado), `404 Not Found` (No existe).
 
+### 2. Módulo: Transacciones (Ventas)
 
-## Contributing
+* **`POST /api/ventas`**
+  * **Descripción:** Registra una nueva venta de entradas. Recibe el ID del usuario, el ID del espectáculo y la ubicación seleccionada, calculando el total y descontando el stock disponible.
+  * **Códigos de estado:** `201 Created` (Venta registrada), `400 Bad Request` (Sin stock o error de validación).
 
-[(Back to top)](#contenidos)
+### 3. Módulo: Reportes
 
-Contributions are always welcome!
-
-See `contributing.md` for ways to get started.
-
-Please adhere to this project's `code of conduct`.
-
-
-
-## Contacto
-
-[(Back to top)](#contenidos)
-
-Diego Marafetti - [dmaraf@palermo.edu](mailto:dmaraf@palermo.edu)
-
-> [!NOTE]  
-> La comunicación preferentemente por Pronto
+* **`GET /api/reportes/recaudacion`**
+  * **Descripción:** Genera y devuelve un reporte agregado con el volumen de ventas y la recaudación total agrupada por cada espectáculo.
+  * **Códigos de estado:** `200 OK`.
