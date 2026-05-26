@@ -1,0 +1,252 @@
+{
+  "info": {
+    "name": "TP Integrador — Sistema de Gestión de Entradas",
+    "description": "Colección de pruebas para la API RESTful del TP Integrador de Arquitectura Web. Cubre todos los endpoints con casos de éxito y error.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Espectáculos — CRUD",
+      "item": [
+        {
+          "name": "[200] GET todos los espectáculos",
+          "request": {
+            "method": "GET",
+            "url": "http://localhost:3000/api/espectaculos",
+            "description": "Recupera la colección completa de espectáculos. Respuesta esperada: 200 OK con array de espectáculos (mínimo 2 por el seed)."
+          }
+        },
+        {
+          "name": "[200] GET espectáculo por ID existente",
+          "request": {
+            "method": "GET",
+            "url": "http://localhost:3000/api/espectaculos/1",
+            "description": "Recupera el detalle del espectáculo con ID 1. Respuesta esperada: 200 OK con el objeto del espectáculo."
+          }
+        },
+        {
+          "name": "[404] GET espectáculo por ID inexistente",
+          "request": {
+            "method": "GET",
+            "url": "http://localhost:3000/api/espectaculos/999",
+            "description": "Intenta recuperar un espectáculo con ID que no existe. Respuesta esperada: 404 Not Found."
+          }
+        },
+        {
+          "name": "[201] POST crear espectáculo válido",
+          "request": {
+            "method": "POST",
+            "url": "http://localhost:3000/api/espectaculos",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Festival de Jazz\",\n  \"fecha\": \"2026-09-20\",\n  \"estadioId\": 3,\n  \"precioBase\": 4500,\n  \"capacidadTotal\": 600\n}"
+            },
+            "description": "Crea un nuevo espectáculo con todos los campos requeridos. Respuesta esperada: 201 Created con el objeto creado, ID autogenerado y entradasVendidas: 0."
+          }
+        },
+        {
+          "name": "[400] POST crear espectáculo sin campos requeridos",
+          "request": {
+            "method": "POST",
+            "url": "http://localhost:3000/api/espectaculos",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "description": "Intenta crear un espectáculo con body vacío. Respuesta esperada: 400 Bad Request con mensaje de error indicando los campos faltantes."
+          }
+        },
+        {
+          "name": "[400] POST crear espectáculo con campos incompletos",
+          "request": {
+            "method": "POST",
+            "url": "http://localhost:3000/api/espectaculos",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Evento Incompleto\"\n}"
+            },
+            "description": "Intenta crear un espectáculo omitiendo campos obligatorios (fecha, estadioId, precioBase, capacidadTotal). Respuesta esperada: 400 Bad Request."
+          }
+        },
+        {
+          "name": "[200] PUT actualizar espectáculo existente",
+          "request": {
+            "method": "PUT",
+            "url": "http://localhost:3000/api/espectaculos/1",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Concierto de Rock — Edición Especial\",\n  \"fecha\": \"2026-11-20\",\n  \"estadioId\": 1,\n  \"precioBase\": 6000,\n  \"capacidadTotal\": 1200\n}"
+            },
+            "description": "Actualiza el espectáculo con ID 1. Verifica idempotencia: el ID y entradasVendidas no pueden ser modificados. Respuesta esperada: 200 OK con el objeto actualizado."
+          }
+        },
+        {
+          "name": "[200] PUT verificar idempotencia (entradasVendidas no cambia)",
+          "request": {
+            "method": "PUT",
+            "url": "http://localhost:3000/api/espectaculos/1",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Concierto de Rock\",\n  \"fecha\": \"2026-10-15\",\n  \"estadioId\": 1,\n  \"precioBase\": 5000,\n  \"capacidadTotal\": 1000,\n  \"entradasVendidas\": 9999\n}"
+            },
+            "description": "Intenta modificar entradasVendidas mediante PUT. Respuesta esperada: 200 OK pero el campo entradasVendidas debe mantener su valor original (no 9999), verificando que el backend protege la integridad transaccional."
+          }
+        },
+        {
+          "name": "[404] PUT actualizar espectáculo inexistente",
+          "request": {
+            "method": "PUT",
+            "url": "http://localhost:3000/api/espectaculos/999",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"No existe\",\n  \"fecha\": \"2026-01-01\",\n  \"estadioId\": 1,\n  \"precioBase\": 1000,\n  \"capacidadTotal\": 100\n}"
+            },
+            "description": "Intenta actualizar un espectáculo con ID inexistente. Respuesta esperada: 404 Not Found."
+          }
+        },
+        {
+          "name": "[200] DELETE eliminar espectáculo existente",
+          "request": {
+            "method": "DELETE",
+            "url": "http://localhost:3000/api/espectaculos/2",
+            "description": "Elimina el espectáculo con ID 2. Respuesta esperada: 200 OK con mensaje de confirmación."
+          }
+        },
+        {
+          "name": "[404] DELETE eliminar espectáculo inexistente",
+          "request": {
+            "method": "DELETE",
+            "url": "http://localhost:3000/api/espectaculos/999",
+            "description": "Intenta eliminar un espectáculo con ID inexistente. Respuesta esperada: 404 Not Found."
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Ventas — Transacciones",
+      "item": [
+        {
+          "name": "[201] POST procesar venta válida",
+          "request": {
+            "method": "POST",
+            "url": "http://localhost:3000/api/ventas",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"espectaculoId\": 1,\n  \"usuarioId\": 1,\n  \"cantidadEntradas\": 2\n}"
+            },
+            "description": "Registra una venta válida para el espectáculo ID 1. Respuesta esperada: 201 Created con ticket generado, precioTotal calculado y estado actualizado del stock."
+          }
+        },
+        {
+          "name": "[400] POST venta con stock insuficiente",
+          "request": {
+            "method": "POST",
+            "url": "http://localhost:3000/api/ventas",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"espectaculoId\": 2,\n  \"usuarioId\": 1,\n  \"cantidadEntradas\": 1\n}"
+            },
+            "description": "Intenta comprar una entrada para el espectáculo ID 2 que ya está AGOTADO (500/500 vendidas en el seed). Respuesta esperada: 400 Bad Request con disponibles: 0."
+          }
+        },
+        {
+          "name": "[400] POST venta con cantidad inválida (cero)",
+          "request": {
+            "method": "POST",
+            "url": "http://localhost:3000/api/ventas",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"espectaculoId\": 1,\n  \"usuarioId\": 1,\n  \"cantidadEntradas\": 0\n}"
+            },
+            "description": "Intenta comprar 0 entradas. Respuesta esperada: 400 Bad Request — debe comprar al menos una entrada."
+          }
+        },
+        {
+          "name": "[404] POST venta para espectáculo inexistente",
+          "request": {
+            "method": "POST",
+            "url": "http://localhost:3000/api/ventas",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"espectaculoId\": 999,\n  \"usuarioId\": 1,\n  \"cantidadEntradas\": 2\n}"
+            },
+            "description": "Intenta procesar una venta para un espectáculo que no existe. Respuesta esperada: 404 Not Found."
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Reportes",
+      "item": [
+        {
+          "name": "[200] GET reporte de recaudación",
+          "request": {
+            "method": "GET",
+            "url": "http://localhost:3000/api/reportes/recaudacion",
+            "description": "Genera el reporte de recaudación del sistema. Respuesta esperada: 200 OK con fechaReporte, recaudacionTotalSistema y detallePorEspectaculo con entradasVendidas y recaudacionTotal por evento."
+          }
+        }
+      ]
+    }
+  ]
+}

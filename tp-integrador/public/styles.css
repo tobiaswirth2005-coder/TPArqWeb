@@ -1,0 +1,111 @@
+:root {
+    --primary-color: #0056b3;
+    --danger-color: #dc3545;
+    --success-color: #28a745;
+    --warning-color: #ffc107;
+    --background-color: #f8f9fa;
+    --card-background: #ffffff;
+    --text-color: #212529;
+    --border-color: #dee2e6;
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    line-height: 1.5;
+}
+
+header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 2rem 1rem;
+    text-align: center;
+}
+
+header h1 { margin: 0; font-size: 2rem; }
+header p { margin: 5px 0 0 0; opacity: 0.9; }
+
+main {
+    max-width: 1100px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+.card {
+    background: var(--card-background);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 24px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.card h2 { margin-top: 0; border-bottom: 2px solid var(--border-color); padding-bottom: 8px; }
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover { opacity: 0.9; }
+.btn-secondary { background-color: #6c757d; }
+.btn-success { background-color: var(--success-color); }
+.btn-edit { background-color: var(--warning-color); color: black; padding: 4px 8px; font-size: 0.85rem; }
+.btn-danger { background-color: var(--danger-color); padding: 4px 8px; font-size: 0.85rem; }
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+th, td {
+    border: 1px solid var(--border-color);
+    padding: 10px 12px;
+    text-align: left;
+}
+
+th { background-color: #f1f3f5; font-weight: 600; }
+
+.reporte-box {
+    background-color: #e9ecef;
+    padding: 15px;
+    border-radius: 4px;
+    border-left: 4px solid var(--primary-color);
+}

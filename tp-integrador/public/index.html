@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Entradas | TP Integrador</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Sistema de Gestión de Espectáculos y Entradas</h1>
+        <p>Panel de Administración y Venta de Tickets</p>
+    </header>
+
+    <main>
+        <section class="card">
+            <h2 id="form-title">Registrar Nuevo Espectáculo</h2>
+            <form id="espectaculo-form">
+                <input type="hidden" id="espectaculo-id">
+                
+                <div class="form-group">
+                    <label for="nombre">Nombre del Evento:</label>
+                    <input type="text" id="nombre" required>
+                </div>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="fecha">Fecha:</label>
+                        <input type="date" id="fecha" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="estadioId">ID del Estadio:</label>
+                        <input type="number" id="estadioId" required>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="precioBase">Precio Base ($):</label>
+                        <input type="number" id="precioBase" step="0.01" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="capacidadTotal">Capacidad Total:</label>
+                        <input type="number" id="capacidadTotal" required>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" id="btn-submit">Guardar Espectáculo</button>
+                    <button type="button" id="btn-cancel" class="btn-secondary" style="display: none;">Cancelar Edición</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="card">
+            <h2>Simular Compra de Entradas</h2>
+            <form id="venta-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="venta-espectaculo-id">ID del Espectáculo:</label>
+                        <input type="number" id="venta-espectaculo-id" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="venta-usuario-id">ID del Usuario:</label>
+                        <input type="number" id="venta-usuario-id" value="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="venta-cantidad">Cantidad de Entradas:</label>
+                        <input type="number" id="venta-cantidad" min="1" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn-success">Procesar Venta</button>
+            </form>
+        </section>
+
+        <section class="card">
+            <h2>Cartelera Actual</h2>
+            <div class="table-responsive">
+                <table id="espectaculos-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Fecha</th>
+                            <th>Estadio ID</th>
+                            <th>Precio Base</th>
+                            <th>Capacidad</th>
+                            <th>Vendidas</th>
+                            <th>Disponibles</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                        </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>Reporte de Recaudación</h2>
+            <button id="btn-generar-reporte">Actualizar Métricas del Sistema</button>
+            <div id="reporte-resultados" style="display: none; margin-top: 15px;">
+                <div class="reporte-box">
+                    <p><strong>Fecha de Emisión:</strong> <span id="rep-fecha"></span></p>
+                    <p><strong>Recaudación Total General:</strong> $<span id="rep-total"></span></p>
+                </div>
+                <h3>Desglose por Evento</h3>
+                <table id="reporte-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Espectáculo</th>
+                            <th>Entradas Vendidas</th>
+                            <th>Total Recaudado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reporte-table-body">
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>

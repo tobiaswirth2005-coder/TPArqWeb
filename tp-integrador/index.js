@@ -5,6 +5,10 @@ const PORT = 3000;
 // Middleware 
 app.use(express.json());
 
+
+//para la carpeta del front 
+app.use(express.static('public'));
+
 // 1. PERSISTENCIA EN MEMORIA Y SEED DE DATOS
 let espectaculos = [
     {
@@ -45,20 +49,38 @@ app.get('/', (req, res) => {
 
 // Endpoint: Crear un nuevo espectáculo (POST)
 app.post('/api/espectaculos', (req, res) => {
-    // 1. Recibimos los datos del nuevo espectáculo que vienen en el "body" de la petición
-    const nuevoEspectaculo = req.body;
+    const { nombre, fecha, estadioId, precioBase, capacidadTotal } = req.body;
 
-    // 2. Le asignamos un ID automático (buscamos el ID del último elemento y le sumamos 1)
-    const nuevoId = espectaculos.length > 0 ? espectaculos[espectaculos.length - 1].id + 1 : 1;
-    nuevoEspectaculo.id = nuevoId;
+    // Validación de campos requeridos
+    if (!nombre || !fecha || !estadioId || !precioBase || !capacidadTotal) {
+        return res.status(400).json({ 
+            error: "Faltan campos requeridos: nombre, fecha, estadioId, precioBase, capacidadTotal" 
+        });
+    }
 
-    // 3.  un espectáculo nuevo arranca con 0 entradas vendidas
-    nuevoEspectaculo.entradasVendidas = 0;
+    // Validación de tipos numéricos
+    if (isNaN(precioBase) || isNaN(capacidadTotal) || isNaN(estadioId)) {
+        return res.status(400).json({ 
+            error: "Los campos estadioId, precioBase y capacidadTotal deben ser numéricos." 
+        });
+    }
 
-    // 4. Lo agregamos a nuestro array 
+    // Generación de ID segura
+    const nuevoId = espectaculos.length > 0 
+        ? Math.max(...espectaculos.map(e => e.id)) + 1 
+        : 1;
+
+    const nuevoEspectaculo = {
+        id: nuevoId,
+        nombre,
+        fecha,
+        estadioId: parseInt(estadioId),
+        precioBase: parseFloat(precioBase),
+        capacidadTotal: parseInt(capacidadTotal),
+        entradasVendidas: 0
+    };
+
     espectaculos.push(nuevoEspectaculo);
-
-    // 5. Respondemos con el código 201 (Created) y el objeto recién creado
     res.status(201).json(nuevoEspectaculo);
 });
 
